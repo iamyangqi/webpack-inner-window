@@ -1,0 +1,18 @@
+# misc
+.DS_Store
+
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+package-lock.json
+dist
+
+*.orig
+
+# idea
+.idea/
+*.iml
+
+*.css.d.ts
+
+yalc.lock
