@@ -1,0 +1,24 @@
+{
+  "name": "webpack-inner-window-plugin",
+  "version": "1.0.0",
+  "description": "When developing, embed a window in the web page to view other content, such as retrieving content or viewing prototypes.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/iamyangqi/webpack-inner-window-plugin.git"
+  },
+  "keywords": [
+    "webpack",
+    "inner-window",
+    "Convenient-development"
+  ],
+  "author": "qi.yang",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/iamyangqi/webpack-inner-window-plugin/issues"
+  },
+  "homepage": "https://github.com/iamyangqi/webpack-inner-window-plugin#readme"
+}

@@ -1,0 +1,166 @@
+let _iframeHistory = [];
+let _historyLength = 0;
+let _isExpand = true;
+
+function createStyleSheet(styles) {
+    const link = document.createElement('link');
+    link.rel = 'stylesheet';
+    link.href = 'http://at.alicdn.com/t/font_1275228_eey9ryt6iqb.css';
+    const style = document.createElement("style");
+    style.type = "text/css";
+    try{
+        style.appendChild(document.createTextNode(styles));
+    }catch(ex){
+        style.styleSheet.cssText = styles; //针对IE
+    }
+    const head = document.getElementsByTagName("head")[0];
+    head.appendChild(link);
+    head.appendChild(style);
+}
+
+function createWindow() {
+    _iframeHistory = sessionStorage.getItem('_iframeHistory');
+    _iframeHistory = _iframeHistory ? JSON.parse(_iframeHistory) : [];
+    _historyLength = _iframeHistory.length;
+    const bodyDom = document.getElementsByTagName('body')[0];
+    const wrapperDivDom = document.createElement('div');
+    wrapperDivDom.classList.add('inner-window-wrapper');
+    const forwardDom = document.createElement('i');
+    forwardDom.classList.add('iconfont');
+    forwardDom.classList.add('icon-qianjin');
+    forwardDom.addEventListener('click', function() {
+        const index = _historyLength+1 >= _iframeHistory.length ? _iframeHistory.length-1 : _historyLength+1;
+        _historyLength = index;
+        inputDivDom.setAttribute('value', _iframeHistory[index])
+        iframeDivDom.setAttribute('src', _iframeHistory[index])
+    })
+    const backwardDom = document.createElement('i');
+    backwardDom.classList.add('iconfont');
+    backwardDom.classList.add('icon-houtui1');
+    backwardDom.addEventListener('click', function() {
+        const index = _historyLength-1 <= 0 ? 0 : _historyLength-1;
+        _historyLength = index;
+        inputDivDom.setAttribute('value', _iframeHistory[index])
+        iframeDivDom.setAttribute('src', _iframeHistory[index])
+    })
+    const freshDom = document.createElement('i');
+    freshDom.classList.add('iconfont');
+    freshDom.classList.add('icon-shuaxin1');
+    freshDom.addEventListener('click', function() {
+        iframeDivDom.setAttribute('src', '')
+        iframeDivDom.setAttribute('src', _iframeHistory[_historyLength])
+    })
+    const expandDom = document.createElement('i');
+    expandDom.classList.add('iconfont');
+    expandDom.classList.add('icon-suoxiao');
+    expandDom.classList.add('expand-icon');
+    expandDom.addEventListener('click', function() {
+        _isExpand = !_isExpand;
+        if (_isExpand) {
+            expandDom.classList.remove('icon-fangda');
+            expandDom.classList.add('icon-suoxiao');
+            wrapperDivDom.classList.remove('inner-window-shrink');
+        } else {
+            expandDom.classList.remove('icon-suoxiao');
+            expandDom.classList.add('icon-fangda');
+            wrapperDivDom.classList.add('inner-window-shrink');
+        }
+    })
+    const operationDivDom = document.createElement('div');
+    operationDivDom.classList.add('inner-window-operation');
+    const iframeDivDom = document.createElement('iframe');
+    iframeDivDom.classList.add('inner-window-iframe');
+    iframeDivDom.setAttribute('id', 'innerWindow');
+    iframeDivDom.setAttribute('name', 'innerWindow');
+    const inputDivDom = document.createElement('input');
+    inputDivDom.classList.add('inner-window-input');
+    inputDivDom.addEventListener('keyup', function(e) {
+        if (e.key === 'Enter') {
+            let inputValue = inputDivDom.value;
+            if (inputValue.indexOf('http') !== 0) {
+                inputValue = 'http://'+inputValue;
+            }
+            iframeDivDom.setAttribute('src', inputValue)
+            _iframeHistory.push(inputValue)
+            sessionStorage.setItem('_iframeHistory', JSON.stringify(_iframeHistory))
+        }
+    })
+    operationDivDom.appendChild(backwardDom);
+    operationDivDom.appendChild(forwardDom);
+    operationDivDom.appendChild(freshDom);
+    operationDivDom.appendChild(inputDivDom);
+    operationDivDom.appendChild(expandDom);
+    wrapperDivDom.appendChild(operationDivDom);
+    wrapperDivDom.appendChild(iframeDivDom);
+    bodyDom.appendChild(wrapperDivDom);
+}
+
+(function() {
+    createStyleSheet(
+        `
+            .inner-window-wrapper {
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                width: 45vw;
+                height: 50vh;
+                background-color: #FFF;
+                border: 1px solid #CCC;
+                overflow: hidden;
+                border-radius: 0px;
+                z-index: 10000;
+            }
+
+            .inner-window-operation {
+                box-sizing: border-box;
+                width: 100%;
+                height: 5vh;
+                padding: .5vh;
+                background-color: #EEE;
+            }
+
+            .inner-window-input {
+                display: inline-block;
+                width: 70%;
+                height: 3vh;
+                line-height: 3vh;
+                margin-left: 10px;
+            }
+
+            .inner-window-iframe {
+                width: 100%;
+                height: 45vh;
+                border: none;
+            }
+
+            .iconfont {
+                display: inline-block;
+                margin: 0 5px;
+                cursor: pointer;
+            }
+
+            .iconfont:not(.expand-icon):hover {
+                transform: scale(.9);
+                font-weight: bold;
+            }
+
+            .inner-window-shrink {
+                width: 5.5vh;
+                height: 5vh;
+                border-radius: 5px;
+            }
+
+            .inner-window-shrink .iconfont:not(.expand-icon), .inner-window-shrink input{
+                display: none;
+            }
+
+            .expand-icon {
+                position: absolute;
+                top: 1vh;
+                right: 1vh;
+                font-size: 24px;
+            }
+        `
+    );
+    createWindow();
+})()
