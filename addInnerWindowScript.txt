@@ -5,7 +5,7 @@ let _isExpand = true;
 function createStyleSheet(styles) {
     const link = document.createElement('link');
     link.rel = 'stylesheet';
-    link.href = 'http://at.alicdn.com/t/font_1275228_eey9ryt6iqb.css';
+    link.href = 'http://at.alicdn.com/t/font_1275228_dp9mj9jj1q9.css';
     const style = document.createElement("style");
     style.type = "text/css";
     try{
@@ -26,8 +26,8 @@ function createWindow() {
     const wrapperDivDom = document.createElement('div');
     wrapperDivDom.classList.add('inner-window-wrapper');
     const forwardDom = document.createElement('i');
-    forwardDom.classList.add('iconfont');
-    forwardDom.classList.add('icon-qianjin');
+    forwardDom.classList.add('innerIcon');
+    forwardDom.classList.add('inner-icon-qianjin');
     forwardDom.addEventListener('click', function() {
         const index = _historyLength+1 >= _iframeHistory.length ? _iframeHistory.length-1 : _historyLength+1;
         _historyLength = index;
@@ -35,8 +35,8 @@ function createWindow() {
         iframeDivDom.setAttribute('src', _iframeHistory[index])
     })
     const backwardDom = document.createElement('i');
-    backwardDom.classList.add('iconfont');
-    backwardDom.classList.add('icon-houtui1');
+    backwardDom.classList.add('innerIcon');
+    backwardDom.classList.add('inner-icon-houtui1');
     backwardDom.addEventListener('click', function() {
         const index = _historyLength-1 <= 0 ? 0 : _historyLength-1;
         _historyLength = index;
@@ -44,25 +44,25 @@ function createWindow() {
         iframeDivDom.setAttribute('src', _iframeHistory[index])
     })
     const freshDom = document.createElement('i');
-    freshDom.classList.add('iconfont');
-    freshDom.classList.add('icon-shuaxin1');
+    freshDom.classList.add('innerIcon');
+    freshDom.classList.add('inner-icon-shuaxin1');
     freshDom.addEventListener('click', function() {
         iframeDivDom.setAttribute('src', '')
         iframeDivDom.setAttribute('src', _iframeHistory[_historyLength])
     })
     const expandDom = document.createElement('i');
-    expandDom.classList.add('iconfont');
-    expandDom.classList.add('icon-suoxiao');
+    expandDom.classList.add('innerIcon');
+    expandDom.classList.add('inner-icon-suoxiao');
     expandDom.classList.add('expand-icon');
     expandDom.addEventListener('click', function() {
         _isExpand = !_isExpand;
         if (_isExpand) {
-            expandDom.classList.remove('icon-fangda');
-            expandDom.classList.add('icon-suoxiao');
+            expandDom.classList.remove('inner-icon-fangda');
+            expandDom.classList.add('inner-icon-suoxiao');
             wrapperDivDom.classList.remove('inner-window-shrink');
         } else {
-            expandDom.classList.remove('icon-suoxiao');
-            expandDom.classList.add('icon-fangda');
+            expandDom.classList.remove('inner-icon-suoxiao');
+            expandDom.classList.add('inner-icon-fangda');
             wrapperDivDom.classList.add('inner-window-shrink');
         }
     })
@@ -85,10 +85,13 @@ function createWindow() {
             sessionStorage.setItem('_iframeHistory', JSON.stringify(_iframeHistory))
         }
     })
-    operationDivDom.appendChild(backwardDom);
-    operationDivDom.appendChild(forwardDom);
-    operationDivDom.appendChild(freshDom);
-    operationDivDom.appendChild(inputDivDom);
+    const wrapperDiv = document.createElement('div');
+    wrapperDiv.classList.add('inner-window-inner-wrapper');
+    wrapperDiv.appendChild(backwardDom);
+    wrapperDiv.appendChild(forwardDom);
+    wrapperDiv.appendChild(freshDom);
+    wrapperDiv.appendChild(inputDivDom);
+    operationDivDom.appendChild(wrapperDiv);
     operationDivDom.appendChild(expandDom);
     wrapperDivDom.appendChild(operationDivDom);
     wrapperDivDom.appendChild(iframeDivDom);
@@ -98,69 +101,75 @@ function createWindow() {
 (function() {
     createStyleSheet(
         `
-            .inner-window-wrapper {
-                position: fixed;
-                top: 20px;
-                right: 20px;
-                width: 45vw;
-                height: 50vh;
-                background-color: #FFF;
-                border: 1px solid #CCC;
-                overflow: hidden;
-                border-radius: 0px;
-                z-index: 10000;
-            }
+        .inner-window-wrapper {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            width: 45vw;
+            height: 50vh;
+            background-color: #FFF;
+            border: 1px solid #CCC;
+            overflow: hidden;
+            border-radius: 0px;
+            z-index: 10000;
+        }
 
-            .inner-window-operation {
-                box-sizing: border-box;
-                width: 100%;
-                height: 5vh;
-                padding: .5vh;
-                background-color: #EEE;
-            }
+        .inner-window-operation {
+            box-sizing: border-box;
+            width: 100%;
+            height: 5vh;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #EEE;
+        }
 
-            .inner-window-input {
-                display: inline-block;
-                width: 70%;
-                height: 3vh;
-                line-height: 3vh;
-                margin-left: 10px;
-            }
+        .inner-window-inner-wrapper {
+            flex: 1;
+        }
 
-            .inner-window-iframe {
-                width: 100%;
-                height: 45vh;
-                border: none;
-            }
+        .inner-window-input {
+            display: inline-block;
+            width: 70%;
+            height: 3vh;
+            line-height: 3vh;
+            margin-left: 10px;
+        }
 
-            .iconfont {
-                display: inline-block;
-                margin: 0 5px;
-                cursor: pointer;
-            }
+        .inner-window-iframe {
+            width: 100%;
+            height: 45vh;
+            border: none;
+        }
 
-            .iconfont:not(.expand-icon):hover {
-                transform: scale(.9);
-                font-weight: bold;
-            }
+        .innerIcon {
+            display: inline-block;
+            margin: 0 5px;
+            cursor: pointer;
+        }
 
-            .inner-window-shrink {
-                width: 5.5vh;
-                height: 5vh;
-                border-radius: 5px;
-            }
+        .innerIcon:not(.expand-icon):hover {
+            transform: scale(.9);
+            font-weight: bold;
+        }
 
-            .inner-window-shrink .iconfont:not(.expand-icon), .inner-window-shrink input{
-                display: none;
-            }
+        .inner-window-shrink {
+            width: 5vh;
+            height: 5vh;
+            line-height: 5vh;
+            text-align: center;
+            border-radius: 5px;
+        }
 
-            .expand-icon {
-                position: absolute;
-                top: 1vh;
-                right: 1vh;
-                font-size: 24px;
-            }
-        `
+        .inner-window-shrink .innerIcon:not(.expand-icon), .inner-window-shrink input{
+            display: none;
+        }
+
+        .expand-icon {
+            font-size: 24px;
+            margin-right: 10px;
+        }
+    `
     );
     createWindow();
 })()
