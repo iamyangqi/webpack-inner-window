@@ -1,6 +1,6 @@
 {
   "name": "webpack-inner-window-plugin",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "When developing, embed a window in the web page to view other content, such as retrieving content or viewing prototypes.",
   "main": "index.js",
   "scripts": {
